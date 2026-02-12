@@ -33,11 +33,18 @@ WekezaSecurityProtocol/
 - **Silent Alerts**: Automatic SOC notification with GPS coordinates
 - **Session Isolation**: 6-hour recovery window with MFA reset
 
-### 3. Multi-Channel Support
-- Mobile Apps (iOS/Android)
-- Web Banking Portal
-- STK Push (M-Pesa)
-- USSD (*234#)
+### 3. **Universal Multi-Channel Support**
+
+The Salama Protocol works across **ALL banking channels** with a unified API:
+
+| Channel | Status | Duress Detection | Key Features |
+|---------|--------|------------------|--------------|
+| **📱 Mobile Apps** | ✅ Full Support | Reversed PIN + Accelerometer | GPS tracking, rich behavioral data |
+| **🌐 Web Portal** | ✅ Full Support | Reversed PIN + Mouse/Keyboard | Browser fingerprinting, session tracking |
+| **💰 STK Push** | ⚠️ Limited | Reversed PIN via USSD | M-Pesa integration, quick transfers |
+| **📞 USSD (*234#)** | ✅ PIN-Only | Reversed PIN | Feature phone support, no internet needed |
+
+**See [Multi-Channel Guide](./docs/MULTI_CHANNEL_GUIDE.md) for detailed integration examples.**
 
 ## Wekeza API Integration
 

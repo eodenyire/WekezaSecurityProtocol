@@ -4,6 +4,7 @@ namespace WekezaSecurityProtocol.Models
 {
     /// <summary>
     /// Authentication request with PIN and optional behavioral data
+    /// Supports all channels: Mobile, Web, STK Push, USSD
     /// </summary>
     public class AuthenticationRequest
     {
@@ -27,13 +28,22 @@ namespace WekezaSecurityProtocol.Models
 
         /// <summary>
         /// GPS coordinates (latitude, longitude)
+        /// Optional - only available for mobile apps and modern web browsers
         /// </summary>
         public GpsCoordinates? Location { get; set; }
 
         /// <summary>
         /// Behavioral analysis data for duress detection
+        /// Optional - only applicable for channels with behavioral signals
+        /// (Mobile apps: accelerometer, Web: mouse/keyboard patterns)
         /// </summary>
         public BehavioralData? BehavioralData { get; set; }
+
+        /// <summary>
+        /// Channel-specific metadata
+        /// Identifies the originating channel and provides channel-specific context
+        /// </summary>
+        public ChannelMetadata? ChannelMetadata { get; set; }
     }
 
     /// <summary>

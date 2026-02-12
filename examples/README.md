@@ -1,69 +1,113 @@
-# Mobile App Integration Examples
+# Multi-Channel Integration Examples
 
-This directory contains example implementations of the Salama Security Protocol for various mobile platforms.
+This directory contains example implementations of the Salama Security Protocol for all supported banking channels.
 
 ## Directory Structure
 
 ```
 examples/
-├── ios-swift/              # Native iOS app (Swift)
-├── android-kotlin/         # Native Android app (Kotlin)
-├── react-native/           # React Native cross-platform
-└── flutter/                # Flutter cross-platform
+├── mobile/       # Mobile app integration (iOS Swift, Android Kotlin)
+├── web/          # Web portal integration (JavaScript)
+├── stk-push/     # STK Push (M-Pesa) integration
+└── ussd/         # USSD (*234#) integration
 ```
 
-## iOS Swift Example
+## Supported Channels
 
-See `ios-swift/SalamaAuthManager.swift` for complete implementation of:
-- Behavioral data collection (accelerometer)
-- PIN hashing and authentication
-- Secure token storage (Keychain)
-- API integration
+### 1. Mobile Apps
+**Path:** `mobile/`
+- **Platforms:** iOS (Swift), Android (Kotlin)
+- **Features:** Full duress detection with accelerometer, GPS tracking
+- **Status:** ✅ Full Support
 
-## Android Kotlin Example
+### 2. Web Portal
+**Path:** `web/`
+- **Platform:** Browser-based (JavaScript)
+- **Features:** Mouse tremor detection, keyboard pattern analysis
+- **Status:** ✅ Full Support
 
-See `android-kotlin/SalamaAuthManager.kt` for complete implementation of:
-- Behavioral data collection (SensorManager)
-- PIN hashing and authentication
-- Secure token storage (EncryptedSharedPreferences)
-- API integration
+### 3. STK Push (M-Pesa)
+**Path:** `stk-push/`
+- **Platform:** Mobile money integration
+- **Features:** Reversed PIN via USSD, transaction quarantine
+- **Status:** ⚠️ Limited Support (PIN-only)
 
-## React Native Example
+### 4. USSD (*234#)
+**Path:** `ussd/`
+- **Platform:** Feature phones
+- **Features:** Text-based menus, reversed PIN detection
+- **Status:** ✅ PIN-Only Support
 
-See `react-native/SalamaAuthService.ts` for complete implementation of:
-- Cross-platform behavioral data collection
-- Authentication flow
-- Secure storage (react-native-keychain)
+## Channel Comparison
 
-## Flutter Example
-
-See `flutter/salama_auth_service.dart` for complete implementation of:
-- Cross-platform sensors integration
-- Authentication flow
-- Secure storage (flutter_secure_storage)
+| Channel | Duress Detection | Behavioral Signals | GPS | Best For |
+|---------|------------------|-------------------|-----|----------|
+| **Mobile** | Reversed PIN + Accelerometer | ✅ Full | ✅ | Primary banking |
+| **Web** | Reversed PIN + Mouse/Keyboard | ✅ Full | ✅ | Desktop users |
+| **STK** | Reversed PIN via USSD | ❌ | ❌ | Quick transfers |
+| **USSD** | Reversed PIN | ❌ | ❌ | Feature phones |
 
 ## Quick Start
 
-Each example includes:
-1. Complete source code
-2. Dependencies list
-3. Setup instructions
-4. Testing guide
+### Mobile App
+```swift
+let salamaAuth = SalamaAuthManager()
+salamaAuth.startPINEntry()
+let response = await salamaAuth.authenticate(accountId, pin)
+```
+
+### Web Portal
+```javascript
+const salamaAuth = new WekeziWebAuth();
+salamaAuth.startPINEntry();
+await salamaAuth.login(accountId, pin);
+```
+
+### STK Push
+```csharp
+var stkAdapter = new StkPushChannelAdapter();
+var authRequest = stkAdapter.CreateAuthRequest(phoneNumber, pin, txnRef);
+var response = await authService.AuthenticateAsync(authRequest);
+```
+
+### USSD
+```csharp
+var ussdAdapter = new UssdChannelAdapter();
+var authRequest = ussdAdapter.CreateAuthRequest(phoneNumber, pin, sessionId, ussdCode);
+var response = await authService.AuthenticateAsync(authRequest);
+```
+
+## Common Features Across All Channels
+
+1. **Reversed PIN Detection** - Works on all channels
+2. **Transaction Quarantine** - Shadow transactions never executed
+3. **Silent SOC Alerts** - Security team notified immediately
+4. **Identical UI** - Shadow mode indistinguishable from standard
+5. **6-Hour Lockout** - Cannot exit shadow mode easily
 
 ## Integration Checklist
 
-- [ ] Implement behavioral data collection (accelerometer)
-- [ ] Hash PIN client-side (SHA-256)
-- [ ] Collect GPS coordinates (with user permission)
-- [ ] Store session token securely (Keychain/EncryptedSharedPreferences)
-- [ ] Implement certificate pinning
-- [ ] Handle token expiry gracefully
-- [ ] Never reveal shadow mode to user
-- [ ] Test both standard and shadow mode flows
+For each channel:
+- [ ] Implement channel adapter
+- [ ] Test reversed PIN detection
+- [ ] Test behavioral detection (if applicable)
+- [ ] Verify shadow mode UI matches standard mode
+- [ ] Test transaction quarantine
+- [ ] Verify SOC alerts sent
+- [ ] Test 6-hour lockout period
+- [ ] Load testing
+- [ ] Security audit
+
+## Documentation
+
+- **Multi-Channel Guide:** [docs/MULTI_CHANNEL_GUIDE.md](../docs/MULTI_CHANNEL_GUIDE.md)
+- **API Reference:** [docs/API_REFERENCE.md](../docs/API_REFERENCE.md)
+- **Integration Guide:** [docs/INTEGRATION_GUIDE.md](../docs/INTEGRATION_GUIDE.md)
+- **Security Guidelines:** [docs/SECURITY.md](../docs/SECURITY.md)
 
 ## API Endpoints
 
-All examples integrate with:
+All channels use the same unified API:
 - **Authentication:** `POST /api/v1/auth/login`
 - **Balance:** `GET /api/v1/account/balance`
 - **Transactions:** `GET /api/v1/account/transactions`
@@ -73,7 +117,9 @@ Base URL: `https://api.wekeza.com/security/v1`
 
 ## Support
 
-For help with integration:
-- Review the [Integration Guide](../docs/INTEGRATION_GUIDE.md)
-- Check the [API Reference](../docs/API_REFERENCE.md)
-- Contact: dev@wekeza.com
+For channel-specific integration support:
+- **Mobile Apps:** mobile-dev@wekeza.com
+- **Web Portal:** web-dev@wekeza.com
+- **STK/USSD:** telco-integration@wekeza.com
+- **General:** dev@wekeza.com
+
